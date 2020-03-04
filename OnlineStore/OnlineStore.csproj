@@ -4,8 +4,17 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnlineStore.Models\OnlineStore.Models.csproj" />
+    <ProjectReference Include="..\OnlineStore.Services\OnlineStore.Services.csproj" />
   </ItemGroup>
 
 </Project>
