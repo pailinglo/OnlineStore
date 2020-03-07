@@ -6,7 +6,7 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Services
 {
-    class SQLProductRepository : IProductRepository
+    public class SQLProductRepository : IProductRepository
     {
         private readonly AppDbContext context;
 
@@ -40,6 +40,9 @@ namespace OnlineStore.Services
 
         public Product GetProduct(int Id)
         {
+            //??not sure why the category is not automatically populated for Product, need to figure out.
+            //for now, use CategoryId
+            var product = context.Products.Find(Id);
             return context.Find<Product>(Id);
         }
 

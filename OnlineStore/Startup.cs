@@ -29,6 +29,11 @@ namespace OnlineStore
             //use AddDbContextPool rather than AddDbContext
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("InventoryDBConnection")));
+
+            services.AddScoped<IProductRepository, SQLProductRepository>();
+            services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,7 +5,7 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Services
 {
-    interface IProductRepository
+    public interface IProductRepository
     {
         IEnumerable<Product> GetAllProducts();
         IEnumerable<Product> Search(string searchTerm);
