@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,10 @@ namespace OnlineStore
             //use AddDbContextPool rather than AddDbContext
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("InventoryDBConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()  //using Microsoft.AspNetCore.Identity
+                .AddEntityFrameworkStores<AppDbContext>();      //adds an entity framework implementation of identity informaiton stores
+                       
 
             services.AddScoped<IProductRepository, SQLProductRepository>();
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
