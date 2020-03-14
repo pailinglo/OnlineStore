@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineStore.Models;
 using OnlineStore.Services;
 
 namespace OnlineStore
@@ -31,9 +32,21 @@ namespace OnlineStore
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("InventoryDBConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()  //using Microsoft.AspNetCore.Identity
-                .AddEntityFrameworkStores<AppDbContext>();      //adds an entity framework implementation of identity informaiton stores
-                       
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                    options =>
+                    {
+                        options.Password.RequireDigit = false;
+                        options.Password.RequiredLength = 6;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequireUppercase = false;
+                    }
+
+                )  //using Microsoft.AspNetCore.Identity
+                .AddEntityFrameworkStores<AppDbContext>()      //adds an entity framework implementation of identity informaiton stores
+                .AddDefaultTokenProviders();                   //to generate token for user e-mail confirmation.
+
+
 
             services.AddScoped<IProductRepository, SQLProductRepository>();
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
