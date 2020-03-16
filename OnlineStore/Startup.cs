@@ -40,14 +40,15 @@ namespace OnlineStore
                         options.Password.RequireLowercase = false;
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
+                        options.SignIn.RequireConfirmedEmail = true;
                     }
 
                 )  //using Microsoft.AspNetCore.Identity
                 .AddEntityFrameworkStores<AppDbContext>()      //adds an entity framework implementation of identity informaiton stores
                 .AddDefaultTokenProviders();                   //to generate token for user e-mail confirmation.
 
-
-
+            
+            
             services.AddScoped<IProductRepository, SQLProductRepository>();
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
 
@@ -73,8 +74,9 @@ namespace OnlineStore
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
