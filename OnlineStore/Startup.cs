@@ -41,6 +41,9 @@ namespace OnlineStore
                         options.Password.RequireNonAlphanumeric = false;
                         options.Password.RequireUppercase = false;
                         options.SignIn.RequireConfirmedEmail = true;
+                        //maximum failed attempt before locked out:
+                        options.Lockout.MaxFailedAccessAttempts = 5;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                     }
 
                 )  //using Microsoft.AspNetCore.Identity
