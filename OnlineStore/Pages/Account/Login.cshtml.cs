@@ -59,7 +59,11 @@ namespace OnlineStore.Pages.Account
                     //to prevent open redirect attack, check if Url is local before redirect. or use LocalRedirect.
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return RedirectToPage(returnUrl);
+                        //return RedirectToPage(returnUrl);
+                        //return RedirectToPage("/Products/Edit/2");
+                        //if using above method, I will get error "InvalidOperationException: No page named '/Products/Edit/2' matches the supplied values."
+                        
+                        return Redirect(returnUrl);
                     }
 
                     return RedirectToPage("/Products/Index");

@@ -1,4 +1,4 @@
-﻿@inject SignInManager<ApplicationUser> SignInManager
+﻿@inject SignInManager<ApplicationUser> signInManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,13 +34,16 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" asp-page="/Products/Index">View</a>
-                                <a class="dropdown-item" asp-page="/Products/Edit">Add</a>
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    <a class="dropdown-item" asp-page="/Products/Edit">Add</a>
+                                }
                             </div>
                         </li>
 
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (signInManager.IsSignedIn(User))
                         {
                             <form method="post" asp-page="/Account/Login" asp-page-handler="Logout">
                                 <li class="nav-item">

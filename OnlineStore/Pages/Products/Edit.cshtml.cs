@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineStore.Pages.Products
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly IProductRepository productRepository;
@@ -37,6 +39,7 @@ namespace OnlineStore.Pages.Products
             this.webHostEnvironment = webHostEnvironment;
         
         }
+        
         public IActionResult OnGet(int? productId)
         {
             
