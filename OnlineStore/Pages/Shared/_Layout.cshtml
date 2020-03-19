@@ -40,7 +40,15 @@
                                 }
                             </div>
                         </li>
-
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-page="/Admin/ListRoles">Roles</a>                              
+                            </div>
+                        </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @if (signInManager.IsSignedIn(User))

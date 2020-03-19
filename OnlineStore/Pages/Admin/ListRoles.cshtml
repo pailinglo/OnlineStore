@@ -1,0 +1,68 @@
+﻿@page
+@model OnlineStore.Pages.Admin.ListRolesModel
+@inject RoleManager<IdentityRole> roleManager
+@{
+    ViewData["Title"] = "ListRoles";
+}
+
+<h1>Roles</h1>
+<div class="row">
+    <div class="col-md-12">
+            @foreach (var role in roleManager.Roles)
+            {
+                <div class="card mb-3">
+                    <div class="card-header">
+                       Role ID: @role.Id
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@role.Name</h5>
+                    </div>
+                    <div class="card-footer">
+                        <form method="post" asp-page-handler="DeleteRole" asp-route-roleId="@role.Id">
+                            <a class="btn btn-primary" asp-page="EditRole" asp-route-roleId="@role.Id">Edit</a>
+                            <button class="btn btn-primary" onclick="confirmDelete('@role.Id'); return false;">Delete</button>
+                            <span id="ConfirmDelete_@role.Id" style="display:none;">
+                                <span>
+                                    Are you sure to delete?
+                                </span>
+                                <button type="submit" class="btn btn-primary">Yes</button>
+                                <button class="btn btn-primary" onclick="cancelDelete('@role.Id'); return false;">No</button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            }
+
+            <div class="card bg-primary text-white">
+                <div class="card-header">
+                    <h4 class="card-title">Create New Role</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="CreateRole">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <lable asp-for="RoleName"></lable>
+                            <input class="form-control" asp-for="RoleName" />
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+                
+            </div>
+    </div>
+</div>
+
+@section Scripts{ 
+
+    <script>
+        function confirmDelete(roleId) {
+            $("#ConfirmDelete_" + roleId).css("display", "block");
+        }
+
+        function cancelDelete(roleId) {
+            $("#ConfirmDelete_" + roleId).css("display", "none");
+        }
+    </script>
+
+}
