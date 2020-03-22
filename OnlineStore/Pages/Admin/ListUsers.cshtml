@@ -1,0 +1,56 @@
+﻿@page
+@model OnlineStore.Pages.Admin.ListUsersModel
+@{
+    ViewData["Title"] = "ListUsers";
+}
+
+<h1>List Users</h1>
+    
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <form method="get" asp-page-handler="SearchUsers">
+                <input type="hidden" name="handler" value="SearchUsers" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="input-group">
+                    <input class="form-control" asp-for="SearchTerm" />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </span>
+                </div>
+                
+            </form>
+
+        </div>
+        
+        <div>
+            @if (!Model.Users.Any())
+            {
+                <h3>No result</h3>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User E-mail</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>@user.Email</td>
+                                    <td>
+                                        <a asp-page="/Admin/EditUser" asp-route-userId="@user.Id">Edit</a>
+                                    </td>
+                            </tr>
+                            }
+                        </tbody>
+                </table>
+            }
+
+        </div>
+    </div>
+</div>
