@@ -13,7 +13,8 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Pages.Admin
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [Authorize(Policy = "DeleteRolePolicy")]
     public class ListRolesModel : PageModel
     {
         private readonly RoleManager<IdentityRole> roleManager;

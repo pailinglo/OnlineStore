@@ -43,7 +43,9 @@
                                 <tr>
                                     <td>@user.Email</td>
                                     <td>
-                                        <a asp-page="/Admin/EditUser" asp-route-userId="@user.Id">Edit</a>
+                                        <a class="btn btn-sm btn-primary" asp-page="/Admin/EditUser" asp-route-userId="@user.Id">Edit</a>
+                                        <a class="btn btn-sm btn-primary" asp-page="/Admin/EditUserClaims" asp-route-userId="@user.Id">Edit Claims</a>
+
                                     </td>
                             </tr>
                             }

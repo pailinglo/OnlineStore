@@ -1,0 +1,27 @@
+﻿@page
+@model OnlineStore.Pages.Admin.EditUserClaimsModel
+@{
+    ViewData["Title"] = "EditUserClaims";
+}
+
+<h1>Edit User Claims</h1>
+
+
+<form method="post" asp-page-handler="OnPost">
+    <h3>@Model.UserName</h3>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="UserId" />
+    <div class="m-2">
+        @for (int i = 0; i < Model.UserCheckList.Count; i++)
+        {
+            <div class="form-check">
+                <input type="hidden" asp-for="@Model.UserCheckList[i].ClaimType" />
+                <input type="hidden" asp-for="@Model.UserCheckList[i].ClaimValue" />
+                <input class="form-check-input" asp-for="@Model.UserCheckList[i].IsSelected" />
+                <label class="form-check-label" asp-for="@Model.UserCheckList[i].IsSelected">@Model.UserCheckList[i].ClaimType</label>
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a class="btn btn-primary" asp-page="/Admin/ListUsers">Cancel</a>
+</form>

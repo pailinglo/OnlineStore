@@ -10,7 +10,8 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Pages.Admin
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminRolePolicy")]
     public class ListUsersModel : PageModel
     {
         public IEnumerable<ApplicationUser> Users;
