@@ -64,9 +64,7 @@ namespace OnlineStore.Pages.Admin
                     ClaimValue = claim.Value
                 });
             }
-
-            var s = User.Claims;
-
+           
             return Page();
         }
 

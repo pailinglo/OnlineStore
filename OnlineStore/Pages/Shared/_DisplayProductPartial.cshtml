@@ -1,7 +1,7 @@
 ﻿@model Product
 @{
 
-    var photoPath = "~/images/" + (Model.PhotoPath ?? "noimage.jpg");
+    var photoPath = "~/images/" + (Model.PhotoPath ?? "noimage.png");
     var showButtons = (bool)ViewData["ShowButtons"];
 
 
@@ -18,7 +18,7 @@
     @if (showButtons)
     {
 <div class="card-footer text-center">
-    <a asp-page="/Products/Details" asp-route-id="@Model.ProductId" class="btn btn-primary m-1">View</a>
+    <a asp-page="/Products/Details" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">View</a>
     <a asp-page="/Products/Edit" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">Edit</a>
 </div>
     }
