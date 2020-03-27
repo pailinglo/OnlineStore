@@ -12,11 +12,14 @@ namespace OnlineStore.Pages.Products
     public class DetailsModel : PageModel
     {
         private readonly IProductRepository productRepository;
+        private readonly IShoppingCart shoppingCart;
 
         public Product Product { get; set; }
-        public DetailsModel(IProductRepository productRepository)
+        public DetailsModel(IProductRepository productRepository,
+            IShoppingCart shoppingCart)
         {
             this.productRepository = productRepository;
+            this.shoppingCart = shoppingCart;
         }
         public IActionResult OnGet(string productId)
         {
@@ -28,5 +31,12 @@ namespace OnlineStore.Pages.Products
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPost(int productId)
+        {
+            int totalCount = shoppingCart.AddToCart(productId);
+            return RedirectToPage("/Order/ViewShoppingCart");
+        }
+
     }
 }

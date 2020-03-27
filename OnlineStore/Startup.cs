@@ -71,14 +71,21 @@ namespace OnlineStore
 
 
             });
+            //for session to work
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
-
-            
+            // for custom components that require access to HttpContext
+            services.AddHttpContextAccessor();
 
             services.AddScoped<IProductRepository, SQLProductRepository>();
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
-
+            services.AddScoped<IShoppingCart, ShoppingCart>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -102,7 +109,9 @@ namespace OnlineStore
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+            //for session to work.
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

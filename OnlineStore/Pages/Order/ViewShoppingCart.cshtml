@@ -1,0 +1,50 @@
+﻿@page
+@model OnlineStore.Pages.Order.ViewShoppingCartModel
+@{
+    ViewData["Title"] = "ShoppingCart";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Shopping Cart</h1>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr><th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Update</th>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.CartItems.Count; i++)
+                    {
+                        var caritem = Model.CartItems[i];
+                        <form method="post" asp-page-handler="UpdateShoppingCart">
+                            <input type="hidden" name="recordId" value="@Model.CartItems[i].RecordId" />
+                            <tr>
+                                <td>@caritem.Product.Name</td>
+                                <td>@caritem.Product.Price</td>
+                                <td>
+                                    <input class="form-control" name="count" value="@Model.CartItems[i].Count" />
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </td>
+                            </tr>
+                        </form>
+                    }
+                    
+                </tbody>
+                <tfoot>
+                    <tr><td>&nbsp;</td><td>&nbsp;</td><td style="text-align:right"># of Items</td><td>@Model.TotalCount</td></tr>
+                    <tr><td>&nbsp;</td><td>&nbsp;</td><td style="text-align:right">Total</td><td>$@Model.Total</td></tr>
+                </tfoot>
+                
+            </table>
+        </div>
+        <div class="text-right">
+            <a asp-page="/Products/Index" class="btn btn-primary">Continue Shopping</a>
+            <a asp-page-handler="ProceedToCheckout" class="btn btn-danger">Proceed to Checkout</a>
+        </div>
+    </div>
+</div>

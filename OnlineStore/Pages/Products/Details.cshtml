@@ -13,8 +13,11 @@
     <div class="col-lg-4 mt-3">
         <form method="post">
             <h5>@Model.Product.Description</h5>
-            <button class="btn btn-primary">Add to Cart</button>
-            <a asp-page="/Products/Index" class="btn btn-primary">Back to Products</a>
+            <h6>Price: @Model.Product.Price</h6>
+            <input type="hidden" asp-for="@Model.Product.ProductId" />
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+
         </form>
+        <a asp-page="/Products/Index" class="btn btn-primary">Back to Products</a>
     </div>
 </div>
