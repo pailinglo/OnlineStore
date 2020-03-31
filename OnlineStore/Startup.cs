@@ -74,7 +74,7 @@ namespace OnlineStore
             //for session to work
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
+                options.IdleTimeout = TimeSpan.FromMinutes(3);//For testing purpose, we limit the time span of session. 
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -86,6 +86,7 @@ namespace OnlineStore
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
             services.AddScoped<IShoppingCart, ShoppingCart>();
+            services.AddScoped<IOrderRepository, SQLOrderRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

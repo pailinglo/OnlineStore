@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using OnlineStore.Models;
 using OnlineStore.Services;
 
-namespace OnlineStore.Pages.Order
+namespace OnlineStore.Pages.Orders
 {
     public class ViewShoppingCartModel : PageModel
     {
@@ -43,11 +43,11 @@ namespace OnlineStore.Pages.Order
             //check if user logged in, if not, redirect to login page
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToPage("/Order/Shipping");
+                return RedirectToPage("/Orders/Shipping");
             }
             else
             {
-                return RedirectToPage("/Account/Login", new { returnUrl = "/Order/Shipping" });
+                return RedirectToPage("/Account/Login", new { returnUrl = "/Orders/Shipping" });
             }
 
         }

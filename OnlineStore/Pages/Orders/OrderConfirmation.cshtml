@@ -1,0 +1,19 @@
+﻿@page
+@model OnlineStore.Pages.Orders.OrderConfirmationModel
+@{
+    ViewData["Title"] = "OrderConfirmation";
+}
+
+<h1>Order Confirmation</h1>
+<br />
+@if (Model.Order == null)
+{
+    <h4>Something wrong with the order</h4>
+}
+else
+{
+    <partial name="_ShippingInfoPartial" model="Model.Order" />
+    <br />
+    <h3>Details of your order: # @Model.Order.OrderId</h3>
+    <partial name="_OrderDetailsPartial" model="Model.Order.OrderDetails" />
+}

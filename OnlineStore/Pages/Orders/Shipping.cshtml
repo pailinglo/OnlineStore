@@ -1,0 +1,61 @@
+﻿@page
+@model OnlineStore.Pages.Orders.ShippingModel
+@{
+    ViewData["Title"] = "Shipping";
+}
+ 
+<div class="row">
+    <div class="col-md-6">
+        <h1>Shipping Information</h1>
+        <div>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="Order.Username" />
+                <div class="form-group">
+                    <label asp-for="Order.FirstName"></label>
+                    <input class="form-control" asp-for="Order.FirstName" />
+                    <span asp-validation-for="Order.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.LastName"></label>
+                    <input class="form-control" asp-for="Order.LastName" />
+                    <span asp-validation-for="Order.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.Address"></label>
+                    <input class="form-control" asp-for="Order.Address" />
+                    <span asp-validation-for="Order.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.City"></label>
+                    <input class="form-control" asp-for="Order.City" />
+                    <span asp-validation-for="Order.City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.State"></label>
+                    <input class="form-control" asp-for="Order.State" />
+                    <span asp-validation-for="Order.State" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.PostalCode"></label>
+                    <input class="form-control" asp-for="Order.PostalCode" />
+                    <span asp-validation-for="Order.PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.Phone"></label>
+                    <input class="form-control" asp-for="Order.Phone" />
+                    <span asp-validation-for="Order.Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Order.Email"></label>
+                    <input class="form-control" asp-for="Order.Email" />
+                    <span asp-validation-for="Order.Email" class="text-danger"></span>
+                </div>
+                <a asp-page="/Orders/ViewShoppingCart" class="btn btn-primary">Back</a>
+                <button type="submit" class="btn btn-danger">Place Order</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+

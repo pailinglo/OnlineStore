@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OnlineStore.Models;
+using OnlineStore.Services;
 
 namespace OnlineStore.Pages.Account
 {
@@ -14,6 +15,7 @@ namespace OnlineStore.Pages.Account
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IShoppingCart shoppingCart;
 
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -28,10 +30,12 @@ namespace OnlineStore.Pages.Account
         public bool RememberMe { get; set; }
 
         public LoginModel(UserManager<ApplicationUser> userManager, 
-                          SignInManager<ApplicationUser> signInManager)
+                          SignInManager<ApplicationUser> signInManager,
+                          IShoppingCart shoppingCart)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.shoppingCart = shoppingCart;
         }
         public void OnGet()
         {
@@ -62,10 +66,15 @@ namespace OnlineStore.Pages.Account
                         //return RedirectToPage(returnUrl);
                         //return RedirectToPage("/Products/Edit/2");
                         //if using above method, I will get error "InvalidOperationException: No page named '/Products/Edit/2' matches the supplied values."
-                        
+
+                        //in case there is a shopping cart, migrate the items in shopping cart to user's name
+                        shoppingCart.MigrateCart(user.UserName);
+
                         return Redirect(returnUrl);
                     }
 
+                    //in case there is a shopping cart, migrate the items in shopping cart to user's name
+                    shoppingCart.MigrateCart(user.UserName);
                     return RedirectToPage("/Products/Index");
                 }
 

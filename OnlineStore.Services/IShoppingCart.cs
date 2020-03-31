@@ -21,6 +21,14 @@ namespace OnlineStore.Services
         public int GetCount();
         public void EmptyCart();
 
+        //converts the shopping cart to an order during the checkout phase.
+        //return the order Id as confirmed number
+        public int CreateOrder(Order order);
+
+        // When a user has logged in, migrate their shopping cart to
+        // be associated with their username
+        public void MigrateCart(string userName);
+
     }
 
 }

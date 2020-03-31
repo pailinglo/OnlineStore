@@ -1,0 +1,12 @@
+﻿@model Order
+
+<div class="card" style="max-width:38%">
+    <div class="card-header">DELIVERY ADDRESS</div>
+    <div class="card-body">
+        @Model.FirstName @Model.LastName<br />
+        @Model.Address<br />
+        @Model.City , @Model.State @Model.PostalCode<br />
+        @Model.Phone<br />
+        @Model.Email<br />
+    </div>
+</div>

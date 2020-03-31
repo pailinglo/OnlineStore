@@ -32,10 +32,10 @@ namespace OnlineStore.Pages.Products
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(int productId)
+        public IActionResult OnPost(int productId)
         {
             int totalCount = shoppingCart.AddToCart(productId);
-            return RedirectToPage("/Order/ViewShoppingCart");
+            return RedirectToPage("/Orders/ViewShoppingCart");
         }
 
     }

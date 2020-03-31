@@ -1,0 +1,43 @@
+﻿@model IEnumerable<OrderDetail>
+@{ 
+    int totalCount = 0;
+    decimal total = 0;
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Product</th>
+        <th>UNIT PRICE</th>
+        <th>Quantity</th>
+        <th>EXTENDED PRICE</th>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var subtotal = item.Product.Price * item.Quantity;
+            total += subtotal;
+            totalCount += item.Quantity;
+        <tr>
+            <td>@item.Product.Name</td>
+            <td>@item.Product.Price</td>
+            <td>@item.Quantity</td>
+            <td>$@subtotal</td>
+        </tr>
+            
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="font-weight-bold"># of Items</td>
+            <td>@totalCount</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="font-weight-bold">TOTAL</td>
+            <td>@total</td>
+        </tr>
+    </tfoot>
+</table>

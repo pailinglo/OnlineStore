@@ -98,7 +98,8 @@ namespace OnlineStore.Services
             //"Include" - specify related entity to be included in the query result.
             //Here we need to include Product as well, or the Product would be null.
             //using Microsoft.EntityFrameworkCore;
-            return appDbContext.Carts.Include(c=>c.Product).ToList<Cart>();
+            return appDbContext.Carts.Where<Cart>(e => e.CartId == ShoppingCardId)
+                .Include(c=>c.Product).ToList<Cart>();
 
         }
         //get total price of all the items in cart
@@ -119,5 +120,47 @@ namespace OnlineStore.Services
             appDbContext.SaveChanges();
         }
 
+        //converts the shopping cart to an order during the checkout phase.
+        //return the order Id as confirmed number
+        public int CreateOrder(Order order)
+        {
+            var carItems = GetCartItems();
+            decimal orderTotal = 0;
+            foreach(var item in carItems)
+            {
+                OrderDetail detail = new OrderDetail
+                {
+                    OrderId = order.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Count,
+                    UnitPrice = item.Product.Price
+                };
+                appDbContext.Add<OrderDetail>(detail);
+                orderTotal += item.Count * item.Product.Price;
+            }
+            order.Total = orderTotal;
+            var orderTracking = appDbContext.Attach(order);
+            orderTracking.State = EntityState.Modified;
+
+            appDbContext.SaveChanges();
+
+            EmptyCart();
+
+            return order.OrderId;
+        }
+
+        // When a user has logged in, migrate their shopping cart to
+        // be associated with their username
+        public void MigrateCart(string userName)
+        {
+            var shoppingCart = appDbContext.Carts.Where<Cart>(e => e.CartId == ShoppingCardId);
+            foreach(Cart item in shoppingCart)
+            {
+                item.CartId = userName;
+            }
+            appDbContext.SaveChanges();
+            //change the cartId saved in session to the login user.
+            httpContextAccessor.HttpContext.Session.SetString(CartSessionId, userName);
+        }
     }
 }
