@@ -14,6 +14,7 @@ namespace OnlineStore.Pages.Products
     {
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IShoppingCart shoppingCart;
 
         [BindProperty(SupportsGet =true)]
         public string SearchTerm { get; set; }
@@ -23,10 +24,13 @@ namespace OnlineStore.Pages.Products
         public IEnumerable<Product> Products { get; set; }
         public SelectList CategoryList { get; set; }
 
-        public IndexModel(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public IndexModel(IProductRepository productRepository, 
+            ICategoryRepository categoryRepository,
+            IShoppingCart shoppingCart)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
+            this.shoppingCart = shoppingCart;
         }
         public void OnGet(string searchTerm)
         {
@@ -46,6 +50,13 @@ namespace OnlineStore.Pages.Products
         {
             Products = productRepository.GetProductsByCategory(categoryId);
             CategoryList = new SelectList(categoryRepository.GetAllCategories(), "CategoryId", "Name", categoryId);
+        }
+
+        //add to cart.
+        public IActionResult OnPostAddToCart(int productId)
+        {
+            int totalCount = shoppingCart.AddToCart(productId);
+            return RedirectToPage("/Orders/ViewShoppingCart");
         }
     }
 }

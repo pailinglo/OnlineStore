@@ -1,4 +1,5 @@
 ﻿@model Product
+@inject SignInManager<ApplicationUser> signInManager
 @{
 
     var photoPath = "~/images/" + (Model.PhotoPath ?? "noimage.png");
@@ -7,20 +8,32 @@
 
 }
 
-<div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
-    <div class="card-header">
-        <h3>@Model.Name</h3>
+    <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+        <div class="card-header">
+            <h3>@Model.Name</h3>
+        </div>
+
+        <img class="card-img-top imageThumbnail" src="@photoPath"
+             asp-append-version="true" />
+
+        @if (showButtons)
+        {
+            <form method="post" asp-page-handler="AddToCart">
+
+                <div class="card-footer text-center">
+                    <a asp-page="/Products/Details" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">View</a>
+
+                    <input type="hidden" asp-for="@Model.ProductId" />
+                    <button class="btn btn-primary" style="width:auto" type="submit">Add to Cart</button>
+
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <a asp-page="/Products/Edit" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">Edit</a>
+                    }
+
+                </div>
+            </form>
+
+        }
+
     </div>
-
-    <img class="card-img-top imageThumbnail" src="@photoPath"
-         asp-append-version="true" />
-
-    @if (showButtons)
-    {
-<div class="card-footer text-center">
-    <a asp-page="/Products/Details" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">View</a>
-    <a asp-page="/Products/Edit" asp-route-productid="@Model.ProductId" class="btn btn-primary m-1">Edit</a>
-</div>
-    }
-
-</div>

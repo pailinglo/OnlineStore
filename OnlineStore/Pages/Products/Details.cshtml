@@ -10,14 +10,14 @@
     <div class="col-lg-4">
         <partial name="_DisplayProductPartial" model="@Model.Product" view-data="ViewData" />
     </div>
-    <div class="col-lg-4 mt-3">
+    <div class="col-lg-6 mt-3">
         <form method="post">
             <h5>@Model.Product.Description</h5>
             <h6>Price: @Model.Product.Price</h6>
             <input type="hidden" asp-for="@Model.Product.ProductId" />
             <button type="submit" class="btn btn-primary">Add to Cart</button>
-
+            <a asp-page="/Products/Index" class="btn btn-primary">Back to Products</a>
         </form>
-        <a asp-page="/Products/Index" class="btn btn-primary">Back to Products</a>
+        
     </div>
 </div>
