@@ -69,6 +69,19 @@ namespace OnlineStore.Services
             return context.Orders.Where(o => o.Username.Contains(searchTerm) || o.Email.Contains(searchTerm));
         }
 
+        public IEnumerable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate)
+        {
+            return context.Orders.Where(o => o.OrderDate >= startDate && o.OrderDate < endDate.AddDays(1));
+        }
+
+        public IEnumerable<Order> SearchOrdersByEmail(string userEmail)
+        {
+            return context.Orders.Where(o => o.Email == userEmail);
+        }
+        public IEnumerable<Order> SearchOrdersByPhone(string userPhone)
+        {
+            return context.Orders.Where(o => o.Phone == userPhone);
+        }
         public Order Update(Order updatedOrder)
         {
             var order = context.Orders.Attach(updatedOrder);

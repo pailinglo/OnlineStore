@@ -1,0 +1,79 @@
+﻿@page
+@model OnlineStore.Pages.Orders.ManageOrdersModel
+@{
+    ViewData["Title"] = "ManageOrders";
+}
+
+<h1>Manage Orders</h1>
+
+<form method="get" asp-page-handler="SearchOrders">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="hidden" name="handler" value="SearchOrders" />
+            <div class="input-group mt-1">
+                <label asp-for="Input.OrderId" style="width:150px;"></label>
+                <input class="form-control" asp-for="Input.OrderId" />
+            </div>
+            <div class="input-group mt-1">
+                <label asp-for="Input.UserEmail" style="width:150px;"></label>
+                <input class="form-control" asp-for="Input.UserEmail" />
+            </div>
+            <div class="input-group mt-1">
+                <label asp-for="Input.UserPhone" style="width:150px;"></label>
+                <input class="form-control" asp-for="Input.UserPhone" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group mt-1">
+                <label asp-for="Input.StartDate" style="width:150px;"></label>
+                <input class="form-control" asp-for="Input.StartDate" />
+            </div>
+            <div class="input-group mt-1">
+                <label asp-for="Input.EndDate" style="width:150px;"></label>
+                <input class="form-control" asp-for="Input.EndDate" />
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        @if (Model.Orders != null)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Order ID#</th>
+                        <th>Order Date</th>
+                        <th>User</th>
+                        <th>Total</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>@order.OrderId</td>
+                            <td>@order.OrderDate</td>
+                            <td>@order.Username</td>
+                            <td>@order.Total</td>
+                            <td>
+                                <a class="btn">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h3>No Orders Found.</h3>
+        }
+    </div>
+</div>
+
+

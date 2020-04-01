@@ -15,5 +15,8 @@ namespace OnlineStore.Services
         IEnumerable<Order> Search(string searchTerm);
         IEnumerable<OrderDetail> GetOrderDetails(int orderId);
         Order GetOrder(int orderId);
+        IEnumerable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate);
+        IEnumerable<Order> SearchOrdersByEmail(string userEmail);
+        IEnumerable<Order> SearchOrdersByPhone(string userPhone);
     }
 }
