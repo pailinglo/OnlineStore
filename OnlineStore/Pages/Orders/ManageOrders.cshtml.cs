@@ -91,5 +91,13 @@ namespace OnlineStore.Pages.Orders
             return Page();
         }
 
+        public IActionResult OnGetShowOrderDetails(int orderId)
+        {
+            IEnumerable<OrderDetail> orderDetails = orderRepository.GetOrderDetails(orderId);
+
+            return Partial("_OrderDetailsPartial", orderDetails);
+            
+        }
+
     }
 }

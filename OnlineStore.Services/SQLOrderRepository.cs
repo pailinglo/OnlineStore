@@ -61,7 +61,8 @@ namespace OnlineStore.Services
 
         public IEnumerable<OrderDetail> GetOrderDetails(int orderId)
         {
-            return context.OrderDetails.Where(d => d.OrderId == orderId);
+            var orderDetails = context.OrderDetails.Where(d => d.OrderId == orderId).Include(d => d.Product);
+            return orderDetails;
         }
 
         public IEnumerable<Order> Search(string searchTerm)
