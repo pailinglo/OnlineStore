@@ -87,6 +87,7 @@ namespace OnlineStore
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
             services.AddScoped<IShoppingCart, ShoppingCart>();
             services.AddScoped<IOrderRepository, SQLOrderRepository>();
+            services.AddScoped<IInventoryRepository, SQLInventoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -25,5 +25,8 @@ namespace OnlineStore.Services
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        public DbSet<InventoryRecord> Inventory { get; set; }
+        public DbSet<InventoryUpdateRecord> InventoryHistory { get; set; }
     }
 }

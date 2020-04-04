@@ -1,0 +1,97 @@
+﻿@page
+@model OnlineStore.Pages.Inventory.ManageInventoryModel
+
+<h1>Inventory</h1>
+    
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.Inventory.Count() == 0)
+        {
+            <h3>No records</h3>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr><th>Product ID</th>
+                    <th>Product</th>
+                    <th>Picture</th>
+                    <th>Quantity</th>
+                    <th>Last updated on</th>
+                    <th>Update Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(int i=0;i<Model.Inventory.Count();i++)
+                    {
+                        var record = Model.Inventory.ElementAt(i);
+                        var photoPath = "/images/" + (@record.Product.PhotoPath ?? "noimage.png");
+                        <form class="UpdateInventory" method="post">
+                            <input type="hidden" name="productId" value="@record.ProductId" />
+                            <tr>
+                                <td>@record.ProductId</td>
+                                <td>@record.Product.Name</td>
+                                <td><img src="@photoPath" class="img-thumbnail" style="max-width:75px"/></td>
+                                <td id="quantity_@record.ProductId">@record.QuantityOnHand</td>
+                                <td>@record.UpdateTime</td>
+                                <td>
+                                    <div class="input-group">
+                                        <input class="form-control" name="quantityChange" />
+                                        <button type="submit" class="submit">Update</button>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </form>
+
+                    }
+                </tbody>
+            </table>
+            
+        }
+
+    </div>
+</div>
+
+@section Scripts{ 
+
+<script>
+    $(function () {
+
+        $('form.UpdateInventory').submit(function (e) {
+
+            e.preventDefault(); //Prevent the normal submission action
+            var form = this;
+            var formData = $(this).serializeArray();
+
+            var productId = formData.filter(function (field) {
+                return field.name == "productId";
+            })[0].value;
+           
+            //alert("productID:" + productId);
+            //console.log($(this).serialize());
+            //serialize() serialize the form inputs and handles request verification token as well.
+            //such that we don't need to add the header additionally.
+            //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+
+            
+            $.post('/Inventory/ManageInventory/?handler=UpdateInventory', $(this).serialize(), function (data) {
+                //on success: update the quantity in the table.
+                $('#quantity_' + productId).text(data);
+                form.reset();   //reset the form.
+            }).fail(function () {
+                alert('Sorry, Something wrong while updating the inventory');
+            });
+
+        });
+
+
+
+    });
+
+    
+
+    
+
+</script>
+}
