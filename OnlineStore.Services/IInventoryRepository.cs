@@ -10,5 +10,10 @@ namespace OnlineStore.Services
         int UpdateInventory(int productId, int quantityChange);
         IEnumerable<InventoryRecord> GetInventory();
         InventoryRecord GetInventory(int productId);
+
+        IEnumerable<InventoryRecord> SearchInventory(string searchTerm);
+
+        IEnumerable<InventoryRecord> SearchInventoryByCategory(int categoryId);
+
     }
 }

@@ -26,6 +26,17 @@ namespace OnlineStore.Services
             return appDbContext.Inventory.Where(i => i.ProductId == productId).FirstOrDefault();
         }
 
+        public IEnumerable<InventoryRecord> SearchInventory(string searchTerm)
+        {
+            return appDbContext.Inventory.Include(i => i.Product).Where(i => i.Product.Name.Contains(searchTerm));
+        }
+
+        public IEnumerable<InventoryRecord> SearchInventoryByCategory(int categoryId)
+        {
+            return appDbContext.Inventory.Include(i => i.Product).Where(i => i.Product.CategoryId == categoryId);
+
+        }
+
         public int UpdateInventory(int productId, int quantityChange)
         {
             var record = appDbContext.Inventory.Where(r => r.ProductId == productId).FirstOrDefault();

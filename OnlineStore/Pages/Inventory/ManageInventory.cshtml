@@ -2,8 +2,31 @@
 @model OnlineStore.Pages.Inventory.ManageInventoryModel
 
 <h1>Inventory</h1>
-    
+
+
 <div class="row">
+    <div class="col-md-12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form method="get" asp-page-handler="SearchInventory">
+            <input type="hidden" name="handler" value="SearchInventory" />
+            <div class="input-group">
+                <input class="form-control" type="text" name="searchTerm" />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+        <form method="get" asp-page-handler="BrowseInventoryByCategory">
+            <input type="hidden" name="handler" value="BrowseInventoryByCategory" />
+            <div class="input-group mt-3">
+                <select name="categoryId" asp-items="@Model.CategoryList" class="custom-select mr-sm-2">
+                    <option value="">Browse By Category</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Browse</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-3">
     <div class="col-md-12">
         @if (Model.Inventory.Count() == 0)
         {
@@ -13,16 +36,17 @@
         {
             <table class="table table-striped">
                 <thead>
-                    <tr><th>Product ID</th>
-                    <th>Product</th>
-                    <th>Picture</th>
-                    <th>Quantity</th>
-                    <th>Last updated on</th>
-                    <th>Update Quantity</th>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product</th>
+                        <th>Picture</th>
+                        <th>Quantity</th>
+                        <th>Last updated on</th>
+                        <th>Update Quantity</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for(int i=0;i<Model.Inventory.Count();i++)
+                    @for (int i = 0; i < Model.Inventory.Count(); i++)
                     {
                         var record = Model.Inventory.ElementAt(i);
                         var photoPath = "/images/" + (@record.Product.PhotoPath ?? "noimage.png");
@@ -31,67 +55,71 @@
                             <tr>
                                 <td>@record.ProductId</td>
                                 <td>@record.Product.Name</td>
-                                <td><img src="@photoPath" class="img-thumbnail" style="max-width:75px"/></td>
+                                <td><img src="@photoPath" class="img-thumbnail" style="max-width:75px" /></td>
                                 <td id="quantity_@record.ProductId">@record.QuantityOnHand</td>
                                 <td>@record.UpdateTime</td>
                                 <td>
-                                    <div class="input-group">
+                                    <div class="input-group col-lg-6">
                                         <input class="form-control" name="quantityChange" />
-                                        <button type="submit" class="submit">Update</button>
+                                        <button type="submit" class="submit">Add</button>
                                     </div>
                                 </td>
-                                
+
                             </tr>
                         </form>
 
                     }
                 </tbody>
             </table>
-            
+
         }
 
     </div>
 </div>
 
-@section Scripts{ 
+@section Scripts{
 
-<script>
-    $(function () {
+    <script>
+        $(function () {
 
-        $('form.UpdateInventory').submit(function (e) {
+            $('form.UpdateInventory').submit(function (e) {
 
-            e.preventDefault(); //Prevent the normal submission action
-            var form = this;
-            var formData = $(this).serializeArray();
+                e.preventDefault(); //Prevent the normal submission action
+                var form = this;
+                var formData = $(this).serializeArray();
 
-            var productId = formData.filter(function (field) {
-                return field.name == "productId";
-            })[0].value;
-           
-            //alert("productID:" + productId);
-            //console.log($(this).serialize());
-            //serialize() serialize the form inputs and handles request verification token as well.
-            //such that we don't need to add the header additionally.
-            //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                var productId = formData.filter(function (field) {
+                    return field.name == "productId";
+                })[0].value;
 
-            
-            $.post('/Inventory/ManageInventory/?handler=UpdateInventory', $(this).serialize(), function (data) {
-                //on success: update the quantity in the table.
-                $('#quantity_' + productId).text(data);
-                form.reset();   //reset the form.
-            }).fail(function () {
-                alert('Sorry, Something wrong while updating the inventory');
+                //alert("productID:" + productId);
+                //console.log($(this).serialize());
+                //serialize() serialize the form inputs and handles request verification token as well.
+                //such that we don't need to add the header additionally.
+                //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+
+
+                $.post('/Inventory/ManageInventory/?handler=UpdateInventory', $(this).serialize(), function (data) {
+                    //on success: update the quantity in the table.
+                    $('#quantity_' + productId).text(data);
+                    $('#quantity_' + productId).css("font-weight", "bold");
+                    setTimeout(function () {
+                        $('#quantity_' + productId).css("font-weight", "normal");
+                    }, 1000);
+                    form.reset();   //reset the form.
+                }).fail(function () {
+                    alert('Sorry, Something wrong while updating the inventory');
+                });
+
             });
+
+
 
         });
 
 
 
-    });
 
-    
 
-    
-
-</script>
+    </script>
 }

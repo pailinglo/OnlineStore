@@ -6,19 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OnlineStore.Services;
 using OnlineStore.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineStore.Pages.Inventory
 {
-    
+    [Authorize(Roles ="Inventory")]
     public class ManageInventoryModel : PageModel
     {
         private readonly IInventoryRepository inventoryRepository;
-        public IEnumerable<InventoryRecord> Inventory { get; set; }
+        private readonly ICategoryRepository categoryRepository;
 
-        public ManageInventoryModel(IInventoryRepository inventoryRepository)
+        public IEnumerable<InventoryRecord> Inventory { get; set; }
+        
+        public SelectList CategoryList { get; set; }
+        
+        
+
+        public ManageInventoryModel(IInventoryRepository inventoryRepository,
+            ICategoryRepository categoryRepository)
         {
             this.inventoryRepository = inventoryRepository;
+            this.categoryRepository = categoryRepository;
             Inventory = inventoryRepository.GetInventory().OrderBy(i => i.Product.Name);
+            CategoryList = new SelectList(categoryRepository.GetAllCategories(), "CategoryId", "Name");
 
         }
         public void OnGet()
@@ -26,6 +38,30 @@ namespace OnlineStore.Pages.Inventory
         
         }
 
+        public void OnGetSearchInventory(string searchTerm)
+        {
+            if (String.IsNullOrEmpty(searchTerm))
+            {
+                ModelState.AddModelError(String.Empty, "Please enter search keyword");
+            }
+            else
+            Inventory = inventoryRepository.SearchInventory(searchTerm).OrderBy(i => i.Product.Name); 
+            
+        }
+
+        public void OnGetBrowseInventoryByCategory(int? categoryId)
+        {
+            
+            if (categoryId.HasValue)
+            {
+                Inventory = inventoryRepository.SearchInventoryByCategory(categoryId.Value).OrderBy(i => i.Product.Name); ;
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Please select a category");
+            }
+            
+        }
 
         public JsonResult OnPostUpdateInventory(int productId, int quantityChange)
         {
