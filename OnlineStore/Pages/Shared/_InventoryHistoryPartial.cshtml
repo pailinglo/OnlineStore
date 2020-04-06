@@ -1,0 +1,28 @@
+﻿@model IEnumerable<InventoryUpdateRecord>
+@{ 
+    var photoPath = "/images/" + (@TempData["ProductPhotoPath"] ?? "noimage.png");
+}    
+<div class="mb-1">
+    <img src="@photoPath" class="img-thumbnail" style="max-width:75px"/>
+    @TempData["ProductName"]
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Quantity Change</th>
+            <th>Update By</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var record in @Model)
+        {
+            <tr>
+                <td>@record.UpdateTime</td>
+                <td>@record.QuantityChange</td>
+                <td>@record.UpdateBy</td>
+            </tr>
+        }
+    </tbody>
+</table>

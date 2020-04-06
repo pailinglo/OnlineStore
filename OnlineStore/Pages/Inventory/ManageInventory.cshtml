@@ -43,6 +43,7 @@
                         <th>Quantity</th>
                         <th>Last updated on</th>
                         <th>Update Quantity</th>
+                        <th>History</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,8 +51,6 @@
                     {
                         var record = Model.Inventory.ElementAt(i);
                         var photoPath = "/images/" + (@record.Product.PhotoPath ?? "noimage.png");
-                        <form class="UpdateInventory" method="post">
-                            <input type="hidden" name="productId" value="@record.ProductId" />
                             <tr>
                                 <td>@record.ProductId</td>
                                 <td>@record.Product.Name</td>
@@ -59,15 +58,20 @@
                                 <td id="quantity_@record.ProductId">@record.QuantityOnHand</td>
                                 <td>@record.UpdateTime</td>
                                 <td>
-                                    <div class="input-group col-lg-6">
-                                        <input class="form-control" name="quantityChange" />
-                                        <button type="submit" class="submit">Add</button>
-                                    </div>
+                                    <form class="UpdateInventory" method="post">
+                                        <input type="hidden" name="productId" value="@record.ProductId" />
+                                        <div class="input-group">
+                                            <input class="form-control" name="quantityChange" />
+                                            <button type="submit" class="submit">Add</button>
+                                        </div>
+                                    </form>
                                 </td>
-
+                                <td>
+                                    <button class="modal-link" data-targetUrl="@Url.PageLink("ManageInventory",pageHandler:"ViewInventoryHistory",new { productId = @record.ProductId },Request.Scheme)">History</button>
+                                </td>
+                                
                             </tr>
-                        </form>
-
+                        
                     }
                 </tbody>
             </table>
@@ -76,6 +80,28 @@
 
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Inventory Update History</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 
 @section Scripts{
 
@@ -92,6 +118,11 @@
                     return field.name == "productId";
                 })[0].value;
 
+                var quantityChange = formData.filter(function (field) {
+                    return field.name == "quantityChange";
+                })[0].value;
+
+                if (quantityChange == 0) return;
                 //alert("productID:" + productId);
                 //console.log($(this).serialize());
                 //serialize() serialize the form inputs and handles request verification token as well.
@@ -113,13 +144,20 @@
 
             });
 
+            //display modal page for inventory history:
+            $('.modal-link').on('click', function (event) {
+
+                //event.preventDefault(); //don't submit the form.
+
+                var dataURL = $(this).data('targeturl');
+                console.log('dataURL:' + dataURL);
+                $('.modal-body').load(dataURL, function () {
+                    $('#myModal').modal({ show: true });
+                });
+            });
 
 
         });
-
-
-
-
 
     </script>
 }

@@ -26,5 +26,7 @@ namespace OnlineStore.Models
         public int ProductId { get; set; }
         public int QuantityChange { get; set; }
         public DateTime UpdateTime { get; set; }
+        public string UpdateBy { get; set; }
+        
     }
 }

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OnlineStore.Services;
 using OnlineStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace OnlineStore.Pages.Inventory
 {
@@ -17,25 +17,30 @@ namespace OnlineStore.Pages.Inventory
     {
         private readonly IInventoryRepository inventoryRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IProductRepository productRepository;
 
         public IEnumerable<InventoryRecord> Inventory { get; set; }
         
         public SelectList CategoryList { get; set; }
         
-        
 
         public ManageInventoryModel(IInventoryRepository inventoryRepository,
-            ICategoryRepository categoryRepository)
+            ICategoryRepository categoryRepository,
+            UserManager<ApplicationUser> userManager,
+            IProductRepository productRepository)
         {
             this.inventoryRepository = inventoryRepository;
             this.categoryRepository = categoryRepository;
+            this.userManager = userManager;
+            this.productRepository = productRepository;
             Inventory = inventoryRepository.GetInventory().OrderBy(i => i.Product.Name);
             CategoryList = new SelectList(categoryRepository.GetAllCategories(), "CategoryId", "Name");
 
         }
         public void OnGet()
         {
-        
+ 
         }
 
         public void OnGetSearchInventory(string searchTerm)
@@ -66,10 +71,10 @@ namespace OnlineStore.Pages.Inventory
         public JsonResult OnPostUpdateInventory(int productId, int quantityChange)
         {
             Console.WriteLine($"Product Id = {productId} quantity change = {quantityChange}");
-
+             
             try
             {
-                int newQuantity = inventoryRepository.UpdateInventory(productId, quantityChange);
+                int newQuantity = inventoryRepository.UpdateInventory(productId, quantityChange, userManager.GetUserName(User));
                 return new JsonResult(newQuantity);
             }
             catch (Exception e)
@@ -80,6 +85,23 @@ namespace OnlineStore.Pages.Inventory
             }
             
         }
+
+
+        public IActionResult OnGetViewInventoryHistory(int productId)
+        {
+            IEnumerable<InventoryUpdateRecord> history = inventoryRepository.GetInventoryUpdateHistory(productId);
+            var product = productRepository.GetProduct(productId);
+            TempData["ProductName"] = product.Name;
+            TempData["ProductPhotoPath"] = product.PhotoPath;
+
+            return Partial("_InventoryHistoryPartial", history);
+            
+
+
+
+
+        }
+
 
     }
 }

@@ -26,6 +26,11 @@ namespace OnlineStore.Services
             return appDbContext.Inventory.Where(i => i.ProductId == productId).FirstOrDefault();
         }
 
+        public IEnumerable<InventoryUpdateRecord> GetInventoryUpdateHistory(int productId)
+        {
+            return appDbContext.InventoryHistory.Where(i => i.ProductId == productId);
+        }
+
         public IEnumerable<InventoryRecord> SearchInventory(string searchTerm)
         {
             return appDbContext.Inventory.Include(i => i.Product).Where(i => i.Product.Name.Contains(searchTerm));
@@ -37,7 +42,7 @@ namespace OnlineStore.Services
 
         }
 
-        public int UpdateInventory(int productId, int quantityChange)
+        public int UpdateInventory(int productId, int quantityChange, string updateBy)
         {
             var record = appDbContext.Inventory.Where(r => r.ProductId == productId).FirstOrDefault();
             if(record != null)
@@ -54,7 +59,9 @@ namespace OnlineStore.Services
                 {
                     ProductId = productId,
                     QuantityChange = quantityChange,
-                    UpdateTime = System.DateTime.Now
+                    UpdateTime = System.DateTime.Now,
+                    UpdateBy = updateBy
+
                 };
 
                 appDbContext.Attach(record);
