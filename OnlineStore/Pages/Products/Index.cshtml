@@ -3,50 +3,63 @@
 @{
     ViewData["Title"] = "Index";
     ViewData["ShowButtons"] = true;
+
+    var prevDisabled = !Model.Products.HasPrevPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
 }
 
 
-<style>
-    .btn {
-        width: 75px;
-    }
-</style>
 
-<h1>Products</h1>
-<!--use get request for search-->
-<form method="get" asp-page-handler="OnGet">
-    <div class="input-group">
-        <input class="form-control" asp-for="SearchTerm" />
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="submit">
-                Search
-            </button>
+    <style>
+        .btn {
+            width: 75px;
+        }
+    </style>
+
+    <h1>Products</h1>
+    <!--use get request for search-->
+    <form method="get" asp-page-handler="OnGet">
+        <div class="input-group">
+            <input class="form-control" asp-for="SearchTerm" />
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    Search
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
 
 
-<form method="get" asp-page-handler="BrowseByCategory">
-    <div class="input-group mt-3">
-        @*Essentially, asp-page-handler sets up an action URL that includes ?handler=search, 
-            which then gets trashed by the browser for GET requests.to avoid this we add the hidden variable:*@ 
-        <input type="hidden" name="handler" value="BrowseByCategory" />
-        <select asp-for="@Model.CategoryId" asp-items="@Model.CategoryList" class="custom-select mr-sm-2">
-            <option value="">Browse By Category</option>
-        </select>
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="submit">
-                Browse
-            </button>
+    <form method="get">
+        <div class="input-group mt-3">
+            <select asp-for="@Model.CategoryId" asp-items="@Model.CategoryList" class="custom-select mr-sm-2">
+                <option value="">Browse By Category</option>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    Browse
+                </button>
+            </div>
         </div>
+    </form>
+
+    <div class="card-deck">
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_DisplayProductPartial" model="product" view-data="ViewData" />
+        }
+
     </div>
-</form>
-
-<div class="card-deck">
-    @foreach (var product in Model.Products)
-    {
-        <partial name="_DisplayProductPartial" model="product" view-data="ViewData" />
-    }
-
+<div class="text-right">
+    <a class="btn btn-link @prevDisabled" 
+       asp-page="/Products/Index"
+       asp-route-searchTerm="@Model.SearchTerm" 
+       asp-route-categoryId="@Model.CategoryId"
+       asp-route-pageIndex="@(Model.Products.PageIndex - 1)">&lt; Prev</a>
+    <a class="btn btn-link @nextDisabled" 
+       asp-page="/Products/Index"
+       asp-route-searchTerm="@Model.SearchTerm"
+       asp-route-categoryId="@Model.CategoryId"
+       asp-route-pageIndex="@(Model.Products.PageIndex + 1)">Next &gt;</a>
 </div>

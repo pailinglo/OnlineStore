@@ -17,13 +17,18 @@ namespace OnlineStore.Utilities
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             this.AddRange(items);
         }
-        public bool HasNextPage()
+        public bool HasNextPage
         {
-            return PageIndex < TotalPages;
+            get{
+                return PageIndex < TotalPages;
+            }
         }
-        public bool HasPrevPage()
+        public bool HasPrevPage
         {
-            return PageIndex > 1;
+            get
+            {
+                return PageIndex > 1;
+            }
         }
 
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)

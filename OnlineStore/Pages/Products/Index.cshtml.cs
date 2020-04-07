@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineStore.Models;
 using OnlineStore.Services;
+using OnlineStore.Utilities;
 
 namespace OnlineStore.Pages.Products
 {
@@ -20,9 +21,11 @@ namespace OnlineStore.Pages.Products
         public string SearchTerm { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int CategoryId { get; set; }
-        public IQueryable<Product> Products { get; set; }
+        public int? CategoryId { get; set; }
+        public PaginatedList<Product> Products { get; set; }
         public SelectList CategoryList { get; set; }
+        public int PageSize { get; set; }
+        public int? PageIndex { get; set; }
 
         public IndexModel(IProductRepository productRepository, 
             ICategoryRepository categoryRepository,
@@ -31,27 +34,29 @@ namespace OnlineStore.Pages.Products
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.shoppingCart = shoppingCart;
+            PageSize = 3;
         }
-        public void OnGet(string searchTerm)
+        public async Task<IActionResult> OnGet(string searchTerm, int? categoryId, int? pageIndex)
         {
-            if (searchTerm == null)
+            if (searchTerm == null && !categoryId.HasValue)
             {
-                Products = productRepository.GetAllProducts();
+                Products = await PaginatedList<Product>.CreateAsync(productRepository.GetAllProducts(), pageIndex??1, PageSize);
             }
-            else
+            else if (searchTerm != null)
             {
-                Products = productRepository.Search(searchTerm);
+                Products = await PaginatedList<Product>.CreateAsync(productRepository.Search(searchTerm), pageIndex??1, PageSize);
+
+            }
+            else if (categoryId.HasValue)
+            {
+                Products = await PaginatedList<Product>.CreateAsync(productRepository.GetProductsByCategory(categoryId.Value), pageIndex ?? 1, PageSize);
             }
 
             CategoryList = new SelectList(categoryRepository.GetAllCategories(), "CategoryId", "Name");
+            return Page();
         }
 
-        public void OnGetBrowseByCategory(int categoryId)
-        {
-            Products = productRepository.GetProductsByCategory(categoryId);
-            CategoryList = new SelectList(categoryRepository.GetAllCategories(), "CategoryId", "Name", categoryId);
-        }
-
+        
         //add to cart.
         public IActionResult OnPostAddToCart(int productId)
         {
