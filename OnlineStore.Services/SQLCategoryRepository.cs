@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using OnlineStore.Models;
 
@@ -14,7 +15,7 @@ namespace OnlineStore.Services
             this.context = context;
         }
         
-        public IEnumerable<Category> GetAllCategories()
+        public IQueryable<Category> GetAllCategories()
         {
             return context.Categories;
         }

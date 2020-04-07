@@ -21,7 +21,7 @@ namespace OnlineStore.Pages.Products
 
         [BindProperty(SupportsGet = true)]
         public int CategoryId { get; set; }
-        public IEnumerable<Product> Products { get; set; }
+        public IQueryable<Product> Products { get; set; }
         public SelectList CategoryList { get; set; }
 
         public IndexModel(IProductRepository productRepository, 

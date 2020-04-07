@@ -17,7 +17,7 @@ namespace OnlineStore.Pages.Orders
     {
         
         public IOrderRepository orderRepository { get; }
-        public IEnumerable<Order> Orders { get; set; }
+        public IQueryable<Order> Orders { get; set; }
         
         //to make custom validation attribute work, I have to put these parameters in a seperate class.
         public class InputModel
@@ -68,8 +68,8 @@ namespace OnlineStore.Pages.Orders
                 if (Input.OrderId.HasValue && Input.OrderId > 0)
                 {
                     var order = orderRepository.GetOrder(Input.OrderId.Value);
-                    Orders = new List<Order>();
-                    Orders = Orders.Append(order);
+                    Orders = Enumerable.Empty<Order>().AsQueryable();
+                    Orders = Orders.Append<Order>(order);
                 }
                 else if (Input.UserEmail != null)
                 {

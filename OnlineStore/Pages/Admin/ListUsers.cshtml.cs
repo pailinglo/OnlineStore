@@ -14,7 +14,7 @@ namespace OnlineStore.Pages.Admin
     [Authorize(Policy = "AdminRolePolicy")]
     public class ListUsersModel : PageModel
     {
-        public IEnumerable<ApplicationUser> Users;
+        public IQueryable<ApplicationUser> Users;
         public string SearchTerm { get; set; }
 
         public ListUsersModel(UserManager<ApplicationUser> userManager)
@@ -39,7 +39,7 @@ namespace OnlineStore.Pages.Admin
             }
             else
             {
-                Users = UserManager.Users.Where(u => u.Email.Contains(searchTerm) || u.UserName.Contains(searchTerm)).OrderBy(u => u.Email).ToList();
+                Users = UserManager.Users.Where(u => u.Email.Contains(searchTerm) || u.UserName.Contains(searchTerm)).OrderBy(u => u.Email);
             }
 
             return Page();

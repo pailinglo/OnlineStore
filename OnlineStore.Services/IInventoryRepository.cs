@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using OnlineStore.Models;
 
@@ -8,14 +9,14 @@ namespace OnlineStore.Services
     public interface IInventoryRepository
     {
         int UpdateInventory(int productId, int quantityChange, string updateBy);
-        IEnumerable<InventoryRecord> GetInventory();
+        IQueryable<InventoryRecord> GetInventory();
         InventoryRecord GetInventory(int productId);
 
-        IEnumerable<InventoryRecord> SearchInventory(string searchTerm);
+        IQueryable<InventoryRecord> SearchInventory(string searchTerm);
 
-        IEnumerable<InventoryRecord> SearchInventoryByCategory(int categoryId);
+        IQueryable<InventoryRecord> SearchInventoryByCategory(int categoryId);
 
-        IEnumerable<InventoryUpdateRecord> GetInventoryUpdateHistory(int productId);
+        IQueryable<InventoryUpdateRecord> GetInventoryUpdateHistory(int productId);
 
     }
 }

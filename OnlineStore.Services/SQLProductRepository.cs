@@ -33,7 +33,7 @@ namespace OnlineStore.Services
             return toBeDeleted;
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public IQueryable<Product> GetAllProducts()
         {
             return context.Products;
         }
@@ -46,12 +46,12 @@ namespace OnlineStore.Services
             return context.Find<Product>(Id);
         }
 
-        public IEnumerable<Product> GetProductsByCategory(int categoryId)
+        public IQueryable<Product> GetProductsByCategory(int categoryId)
         {
             return context.Products.Where(e => e.Category.CategoryId == categoryId);
         }
 
-        public IEnumerable<Product> Search(string searchTerm)
+        public IQueryable<Product> Search(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {

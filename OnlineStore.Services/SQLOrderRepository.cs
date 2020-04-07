@@ -33,12 +33,12 @@ namespace OnlineStore.Services
             return toBeDeleted;
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public IQueryable<Order> GetAllOrders()
         {
             return context.Orders;
         }
 
-        public IEnumerable<Order> GetAllOrders(string userName)
+        public IQueryable<Order> GetAllOrders(string userName)
         {
             return context.Orders.Where(o => o.Username == userName);
         }
@@ -65,21 +65,21 @@ namespace OnlineStore.Services
             return orderDetails;
         }
 
-        public IEnumerable<Order> Search(string searchTerm)
+        public IQueryable<Order> Search(string searchTerm)
         {
             return context.Orders.Where(o => o.Username.Contains(searchTerm) || o.Email.Contains(searchTerm));
         }
 
-        public IEnumerable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate)
+        public IQueryable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate)
         {
             return context.Orders.Where(o => o.OrderDate >= startDate && o.OrderDate < endDate.AddDays(1));
         }
 
-        public IEnumerable<Order> SearchOrdersByEmail(string userEmail)
+        public IQueryable<Order> SearchOrdersByEmail(string userEmail)
         {
             return context.Orders.Where(o => o.Email == userEmail);
         }
-        public IEnumerable<Order> SearchOrdersByPhone(string userPhone)
+        public IQueryable<Order> SearchOrdersByPhone(string userPhone)
         {
             return context.Orders.Where(o => o.Phone == userPhone);
         }

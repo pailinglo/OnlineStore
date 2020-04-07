@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace OnlineStore.Models
@@ -32,6 +33,6 @@ namespace OnlineStore.Models
         public string Email { get; set; }
         public decimal Total { get; set; }
         public DateTime OrderDate { get; set; }
-        public List<OrderDetail> OrderDetails { get; set; }
+        public virtual List<OrderDetail> OrderDetails { get; set; }
     }
 }

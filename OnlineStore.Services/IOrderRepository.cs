@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using OnlineStore.Models;
 
@@ -10,13 +11,13 @@ namespace OnlineStore.Services
         Order Create(Order newOrder);
         Order Delete(int id);
         Order Update(Order updatedOrder);
-        IEnumerable<Order> GetAllOrders();
-        IEnumerable<Order> GetAllOrders(string userName);
-        IEnumerable<Order> Search(string searchTerm);
+        IQueryable<Order> GetAllOrders();
+        IQueryable<Order> GetAllOrders(string userName);
+        IQueryable<Order> Search(string searchTerm);
         IEnumerable<OrderDetail> GetOrderDetails(int orderId);
         Order GetOrder(int orderId);
-        IEnumerable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate);
-        IEnumerable<Order> SearchOrdersByEmail(string userEmail);
-        IEnumerable<Order> SearchOrdersByPhone(string userPhone);
+        IQueryable<Order> SearchOrdersByDate(DateTime startDate, DateTime endDate);
+        IQueryable<Order> SearchOrdersByEmail(string userEmail);
+        IQueryable<Order> SearchOrdersByPhone(string userPhone);
     }
 }

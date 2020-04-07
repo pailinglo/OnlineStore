@@ -20,6 +20,8 @@ namespace OnlineStore.Pages.Inventory
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IProductRepository productRepository;
 
+        //can't update this to IQueryable since EF will throw exception later in the code.
+        //check: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
         public IEnumerable<InventoryRecord> Inventory { get; set; }
         
         public SelectList CategoryList { get; set; }
@@ -89,7 +91,7 @@ namespace OnlineStore.Pages.Inventory
 
         public IActionResult OnGetViewInventoryHistory(int productId)
         {
-            IEnumerable<InventoryUpdateRecord> history = inventoryRepository.GetInventoryUpdateHistory(productId);
+            IQueryable<InventoryUpdateRecord> history = inventoryRepository.GetInventoryUpdateHistory(productId);
             var product = productRepository.GetProduct(productId);
             TempData["ProductName"] = product.Name;
             TempData["ProductPhotoPath"] = product.PhotoPath;
