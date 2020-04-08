@@ -88,6 +88,8 @@ namespace OnlineStore
             services.AddScoped<IShoppingCart, ShoppingCart>();
             services.AddScoped<IOrderRepository, SQLOrderRepository>();
             services.AddScoped<IInventoryRepository, SQLInventoryRepository>();
+            services.AddTransient<IMailService, SmtpMailService>();
+            services.AddTransient<IRazorPartialToStringRenderer, RazorPartialToStringRenderer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
