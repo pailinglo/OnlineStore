@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using OnlineStore.Models;
+using OnlineStore.Services;
 
 namespace OnlineStore.Pages.Account
 {
@@ -15,6 +16,7 @@ namespace OnlineStore.Pages.Account
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
+        private readonly IMailService mailService;
 
         [BindProperty]
         [Required]
@@ -38,10 +40,12 @@ namespace OnlineStore.Pages.Account
         public string ErrorMessage { get; set; }
 
         public RegisterModel(UserManager<ApplicationUser> userManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger,
+            IMailService mailService)
         {
             this.userManager = userManager;
             this.logger = logger;
+            this.mailService = mailService;
         }
         
         public void OnGet()
@@ -74,6 +78,23 @@ namespace OnlineStore.Pages.Account
                     var confirmationLink = Url.Page("/Account/ConfirmEmail", "OnGet", new { userId = user.Id, Token = token }, Request.Scheme);
 
                     logger.Log(LogLevel.Warning, "Register Confirmation Link: " + confirmationLink);
+
+                    //send confirmation e-mail
+                    try
+                    {
+                        await mailService.Send(new Message
+                        {
+                            To = new string[] { Email },
+                            Subject = "Register Confirmation",
+                            Body = $"Thank you for your registration. Please activate your account by clicking <a href=\"{ confirmationLink }\">{ confirmationLink }</a>",
+                            From = "admin@fly.com",
+                            IsHtml = true
+                         });
+
+                    }catch(Exception e)
+                    {
+                        logger.Log(LogLevel.Error, $"Can't send register confirmation link: {confirmationLink} because {e.Message}");
+                    }
 
 
                     //according to https://www.learnrazorpages.com/razor-pages/viewdata

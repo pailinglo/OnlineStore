@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using OnlineStore.Models;
+using OnlineStore.Services;
 
 namespace OnlineStore.Pages.Account
 {
@@ -15,16 +16,19 @@ namespace OnlineStore.Pages.Account
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ForgotPasswordModel> logger;
+        private readonly IMailService mailService;
 
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         public ForgotPasswordModel(UserManager<ApplicationUser> userManager,
-            ILogger<ForgotPasswordModel> logger)
+            ILogger<ForgotPasswordModel> logger,
+            IMailService mailService)
         {
             this.userManager = userManager;
             this.logger = logger;
+            this.mailService = mailService;
         }
         public void OnGet()
         {
@@ -44,8 +48,23 @@ namespace OnlineStore.Pages.Account
                     string resetPasswordUrl = Url.PageLink("ResetPassword", pageHandler: null, new { email = email, token = token }, Request.Scheme);
                     logger.LogWarning("Reset Password: ("+ System.DateTime.Now.ToLongTimeString() + "):" + resetPasswordUrl);
 
-                    //If I only create the page as a Razor view, I will get error
-                    //"No page named '/Account/ForgotPasswordConfirmation' matches the supplied values"
+                    //send confirmation e-mail
+                    try
+                    {
+                        await mailService.Send(new Message
+                        {
+                            To = new string[] { email },
+                            Subject = "Reset Password",
+                            Body = $"Please click the following link to reset your password <a href=\"{ resetPasswordUrl }\">{ resetPasswordUrl }</a>",
+                            From = "admin@fly.com",
+                            IsHtml = true
+                        });
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Log(LogLevel.Error, $"Can't send reset password link: {resetPasswordUrl} because {e.Message}");
+                    }
                 }
 
                 // To avoid account enumeration and brute force attacks, don't
